@@ -4,6 +4,9 @@
 
 The **Document QA Bot** is a streamlined question-answering application that allows users to upload PDF, DOCX, or TXT files and ask questions about the document content. Using embeddings and a language model, the bot quickly retrieves relevant information, helping users explore their documents interactively.
 
+Try out the live demo here:  
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ai-doc-chatbot.streamlit.app/)
+
 ## Features
 
 - **File Upload**: Supports PDF, DOCX, and TXT file formats for document submission.
