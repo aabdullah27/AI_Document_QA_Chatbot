@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 import faiss
 from llama_index.core import VectorStoreIndex, Document, Settings
 from llama_index.vector_stores.faiss import FaissVectorStore
