@@ -6,7 +6,8 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.groq import Groq
 from docx import Document as DocxDocument
 import pymupdf4llm
-import io
+import tempfile
+import os
 
 # Initialize session state
 if "api_key" not in st.session_state:
@@ -18,11 +19,21 @@ if "index" not in st.session_state:
 
 def read_file(file):
     if file.name.endswith('.pdf'):
-        # Use pymupdf4llm for PDF extraction
-        pdf_bytes = io.BytesIO(file.read())
-        return pymupdf4llm.to_markdown(pdf_bytes)
+        # Create a temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+            tmp_file.write(file.getvalue())
+            tmp_file_path = tmp_file.name
+
+        try:
+            # Use pymupdf4llm with the temporary file path
+            md_text = pymupdf4llm.to_markdown(tmp_file_path)
+        finally:
+            # Clean up the temporary file
+            os.unlink(tmp_file_path)
+
+        return md_text
     elif file.name.endswith('.docx'):
-        return "\n".join(para.text for para in DocxDocument(io.BytesIO(file.read())).paragraphs)
+        return "\n".join(para.text for para in DocxDocument(file).paragraphs)
     else:
         return file.getvalue().decode()
 
