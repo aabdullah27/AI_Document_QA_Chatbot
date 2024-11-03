@@ -4,8 +4,9 @@ from llama_index.core import VectorStoreIndex, Document, Settings
 from llama_index.vector_stores.faiss import FaissVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.groq import Groq
-from pypdf import PdfReader
 from docx import Document as DocxDocument
+import pymupdf4llm
+import io
 
 # Initialize session state
 if "api_key" not in st.session_state:
@@ -17,9 +18,11 @@ if "index" not in st.session_state:
 
 def read_file(file):
     if file.name.endswith('.pdf'):
-        return "".join(page.extract_text() for page in PdfReader(file).pages)
+        # Use pymupdf4llm for PDF extraction
+        pdf_bytes = io.BytesIO(file.read())
+        return pymupdf4llm.to_markdown(pdf_bytes)
     elif file.name.endswith('.docx'):
-        return "\n".join(para.text for para in DocxDocument(file).paragraphs)
+        return "\n".join(para.text for para in DocxDocument(io.BytesIO(file.read())).paragraphs)
     else:
         return file.getvalue().decode()
 
