@@ -77,7 +77,7 @@ with st.sidebar:
     if uploaded_files and st.session_state.api_key:
         with st.spinner("Processing documents..."):
             # Initialize Groq LLM and embedding model only if API key is provided
-            llm = Groq(api_key=st.session_state.api_key, model="mixtral-8x7b-32768")
+            llm = Groq(api_key=st.session_state.api_key, model="llama-3.3-70b-versatile")
             embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
             
             # Configure global settings
